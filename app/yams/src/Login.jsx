@@ -1,9 +1,36 @@
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+
+import { useAuth } from './hooks/useAuht';
+import { fetchLogin } from './store/login';
+
 import "./App.css";
 
 function Login() {
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { token } = useSelector((state) => state.auth);
+  const { authenticate, account } = useAuth()
+
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    dispatch(fetchLogin({email, password}))
+  }
+
+  const handleEmail = (e) => setEmail(e.target.value)
+  const handlePassword = (e) => setPassword(e.target.value)
+
+  useEffect(() => {
+    authenticate(); 
+
+    console.log(account)
+  }, [account])
+
   return (
     <>
-      <form className="space-y-4 md:space-y-6" action="#">
+    {token && <p>{token}</p>}
+      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
         <div>
           <label
             htmlFor="email"
@@ -12,6 +39,8 @@ function Login() {
             Your email
           </label>
           <input
+            onChange={handleEmail}
+            value={email}
             type="email"
             name="email"
             id="email"
@@ -27,6 +56,8 @@ function Login() {
             Password
           </label>
           <input
+            onChange={handlePassword}
+            value={password}
             type="password"
             name="password"
             id="password"
@@ -79,6 +110,7 @@ function Login() {
       </form>
     </>
   );
+
 }
 
 export default Login;

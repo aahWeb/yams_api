@@ -47,4 +47,40 @@ Voyez également la documentation : https://tailwindcss.com/docs/guides/vite
 
 ```bash
 npm install @reduxjs/toolkit react-redux
+
+npm install dotenv
+
 ```
+
+Dans vite.config.js
+
+```js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+
+// variable dans le code
+const api_url = import.meta.env.VITE_REACT_APP_API_URL
+
+```
+
+Dans le fichier .env.development
+
+```txt
+VITE_REACT_APP_API_URL=http://localhost:3001/api
+```
+
+Il faut installer dans React
+
+```bash
+npm install js-cookie
+```
+
+- Côté Middleware JWT il n'y a rien à faire le cookie s'écrit bien dans le navigateur. Il sera renvoyé au client via withCredentials à true.

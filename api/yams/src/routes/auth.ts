@@ -15,15 +15,19 @@ const schema = new passwordValidator().is().min(8)
 const users: User[] = USERS;
 const router: Router = express.Router();
 
-router.post('/login', (req: Request, res: Response) => {
-    const { name, password } = trimAll(req.body); // récupération des données du formulaire de login (name et password)
+// for(const u of users){
+//    console.log(u.email)
+//    bcrypt.hash( u.password || '', 10).then(console.log)
+// }
 
-    if (!name || !password) {
+router.post('/login', (req: Request, res: Response) => {
+    const { email, password } = trimAll(req.body); // récupération des données du formulaire de login (email et password)
+    
+    if (!email || !password) {
         return res.status(400).json({ message: "Veuillez remplir tous les champs" });
     }
-
     // on cherche l'utilisateur dans le mock
-    const user: User | undefined = users.find(user => user.name == name);
+    const user: User | undefined = users.find(user => user.email == email);
     if (!user) {
         return res.status(400).json({ message: "Identifiants incorrects" });
     }
@@ -40,10 +44,11 @@ router.post('/login', (req: Request, res: Response) => {
             }, 'secret', {
                 expiresIn: '1h' // le token expire dans 1 heure
             });
-            res.cookie('token', token, { httpOnly: true }); // écriture du cookie avec la valeur du token jwt
+            res.cookie('token', token, { httpOnly: true, secure: false }); // écriture du cookie avec la valeur du token jwt
             /* httpOnly protege des attaques XSS (quelqu'un de malveillant ne pourra pas lire le cookie facilement) */
-            return res.status(200).json({ message: "Vous êtes bien connecté !" });
+            return res.status(200).json({ message: "Vous êtes bien connecté !"});
         } else {
+            console.log({ message: "Identifiants incorrects" })
             return res.status(400).json({ message: "Identifiants incorrects" })
         }
     });
@@ -98,7 +103,6 @@ router.post("/register", function (req: Request, res: Response) {
     });
 
 });
-
 
 router.get('/logout', authentified, function (req: Request, res: Response) {
     res.clearCookie('token');

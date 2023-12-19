@@ -60,20 +60,19 @@ export const PASTRIES: Pastrie[] = [
     },
 ];
 
-export const Users: User[] = [
+export const USERS: User[] = [
   {
     "id": "1",
     "name": "Alice",
     "email": "alice@alice.fr",
-    "password": "alice",
+    "password": "$2b$10$9qnYoc6ZySrdeLRdakm3p.6lksaaMRV/4G0pyRlaCnz4Gto10QH6S", // alice
     "status": Status.Offline,
   },
   {
     "id": "2",
     "name": "Bob",
     "email": "bob@bob.fr",
-    "password": "bob",
+    "password": "$2b$10$2RJ..7EfjLt5ib6CsswP9.ytmfoGTGfgL5LhF6C3n.IBgexqWkH5q", // bob
     "status": Status.Offline,
   }
 ];
-export const USERS : User[] = [];

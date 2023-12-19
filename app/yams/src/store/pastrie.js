@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const api_url = import.meta.env.VITE_REACT_APP_API_URL
+
 export const fetchAllPastries = createAsyncThunk("pastries/fetchAllPastries", async () => {
-  const response = await axios.get("http://localhost:3001/api/pastries");
+  const response = await axios.get(`${api_url}/pastries`);
   await new Promise(r => setTimeout(r, 1000));
 
   return response.data;
