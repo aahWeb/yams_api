@@ -6,6 +6,8 @@ export const authentified = async (req: Request, res: Response, next: NextFuncti
         // On va chercher le token dans la requête
         const token: string = req.params?.token ?? req.cookies?.token ?? "";
 
+        console.log("MIDDLEWARE", token)
+
         if (!token) {
             // aucun token = accès interdit
             return res.status(401).json({ message: "Accès interdit" });
@@ -22,6 +24,7 @@ export const authentified = async (req: Request, res: Response, next: NextFuncti
         }
     } catch (err) {
         console.error(err);
+        
         return res.status(500).json({ error: "Internal server error" });
     }
 };

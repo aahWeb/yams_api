@@ -10,7 +10,8 @@ const router: Router = express.Router();
 const pastries: Pastrie[] = PASTRIES;
 
 // all pastries
-router.get("/pastries", function (req: Request, res: Response) {
+router.get("/pastries", authentified, function (req: Request, res: Response) {
+    
     return res.json(pastries);
 });
 

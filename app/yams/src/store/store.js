@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { pastriesSlice } from './pastrie'
-import { authSlice } from './login'
+import { meSlice } from './me'
 
 export const store = configureStore({
   reducer: {
     pastries : pastriesSlice.reducer,
-    auth : authSlice.reducer
+    me : meSlice.reducer,
   },
 })

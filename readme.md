@@ -84,3 +84,10 @@ npm install js-cookie
 ```
 
 - Côté Middleware JWT il n'y a rien à faire le cookie s'écrit bien dans le navigateur. Il sera renvoyé au client via withCredentials à true.
+
+
+- router
+
+```bash
+npm install react-router-dom localforage match-sorter sort-by
+```

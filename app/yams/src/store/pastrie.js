@@ -4,7 +4,7 @@ import axios from "axios";
 const api_url = import.meta.env.VITE_REACT_APP_API_URL
 
 export const fetchAllPastries = createAsyncThunk("pastries/fetchAllPastries", async () => {
-  const response = await axios.get(`${api_url}/pastries`);
+  const response = await axios.get(`${api_url}/pastries`,  { withCredentials : true });
   await new Promise(r => setTimeout(r, 1000));
 
   return response.data;
@@ -20,7 +20,6 @@ export const pastriesSlice = createSlice({
   name: "pastries",
   initialState,
   reducers: {
-    // standard reducer logic, with auto-generated action types per reducer
   },
   extraReducers: (builder) => {
     builder

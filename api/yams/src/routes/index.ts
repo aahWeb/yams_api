@@ -6,6 +6,8 @@ import auth from "./auth";
 
 const router: Router = express.Router();
 
-router.use("/api", [ pastrie, user, auth ]);
+router.use("/api", pastrie )
+router.use("/", user )
+router.use("/", auth )
 
 export default router;

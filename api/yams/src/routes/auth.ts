@@ -44,6 +44,7 @@ router.post('/login', (req: Request, res: Response) => {
             }, 'secret', {
                 expiresIn: '1h' // le token expire dans 1 heure
             });
+            console.log(token, "TOKEN")
             res.cookie('token', token, { httpOnly: true, secure: false }); // écriture du cookie avec la valeur du token jwt
             /* httpOnly protege des attaques XSS (quelqu'un de malveillant ne pourra pas lire le cookie facilement) */
             return res.status(200).json({ message: "Vous êtes bien connecté !"});
@@ -106,7 +107,9 @@ router.post("/register", function (req: Request, res: Response) {
 
 router.get('/logout', authentified, function (req: Request, res: Response) {
     res.clearCookie('token');
-    return res.status(200).json({message: "Vous êtes bien déconnecté"});
+
+    return res.status(200).json({
+        message: "Vous êtes bien déconnecté", loggedIn : false});
 });
 
 export default router;
