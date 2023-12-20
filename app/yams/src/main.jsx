@@ -8,7 +8,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import Login from "./Login";
 import Root from './routes'
 
 import "./index.css";
@@ -16,25 +15,13 @@ import "./index.css";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <>
-        <Root />
-        <App />
-      </>
-    ),
+    element: <App />,
   },
   {
     path: "/contact",
     element: (
       <>
         <Root />
-        <p>Hello, laisse moi un message</p>
-      </>
-    ),
-    path: "/login",
-    element: (
-      <>
-        <Login />
         <p>Hello, laisse moi un message</p>
       </>
     ),

@@ -44,12 +44,13 @@ router.post('/login', (req: Request, res: Response) => {
             }, 'secret', {
                 expiresIn: '1h' // le token expire dans 1 heure
             });
-            console.log(token, "TOKEN")
+           
             res.cookie('token', token, { httpOnly: true, secure: false }); // écriture du cookie avec la valeur du token jwt
             /* httpOnly protege des attaques XSS (quelqu'un de malveillant ne pourra pas lire le cookie facilement) */
-            return res.status(200).json({ message: "Vous êtes bien connecté !"});
+            return res.status(200).json({ message: "Vous êtes bien connecté !", id : user.id });
         } else {
             console.log({ message: "Identifiants incorrects" })
+
             return res.status(400).json({ message: "Identifiants incorrects" })
         }
     });

@@ -22,6 +22,7 @@ router.get('/me', authentified, function (req: Request, res: Response) {
     if (user) {
         // on duplique l'utilisateur sans le champ password
         const { password, ...userWithoutPassword } = user;
+
         return res.status(200).json(userWithoutPassword);
     } else {
         // on supprime le token de l'utilisateur

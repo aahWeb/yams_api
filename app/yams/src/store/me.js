@@ -12,44 +12,27 @@ export const fetchMe = createAsyncThunk('me/fetchme', async () => {
         return response.data;
 
     }catch(err){
-       
-        return {
-            user : null,
-            message : "Mince tu n'es pas connecté ! "
-        }
+      const user =  null
+
+        return user
     }
    
 })
 
-const initialState = {
-    user : null,
-    status: "idle",
-    error : null,
-    message : ""
-
-  };
-
 export const meSlice = createSlice({
     name: "me",
-    initialState,
+    initialState : {
+      user : null,
+      status: "idle",
+    },
     reducers: {
     },
     extraReducers: (builder) => {
       builder
-        .addCase(fetchMe.pending, (state) => {
-          state.status = "loading";
-        })
         .addCase(fetchMe.fulfilled, (state, action) => {
           state.status = "succeeded";
-          const { user, message } =  action.payload ;
-          state.message = message
-          state.user = user
+          state.user = action.payload ;
         })
-        .addCase(fetchMe.rejected, (state, action) => {
-          state.status = "failed";
-          state.error = action.error.message;
-          state.user =  null
-        });
     },
   });
   

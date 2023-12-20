@@ -3,29 +3,16 @@ import axios from "axios"
 
 const url = import.meta.env.VITE_REACT_APP_URL
 
-export const fetchlogout = createAsyncThunk('auth/fetchlogout', async () => {
+export const logout = createAsyncThunk('auth/fetchlogout', async () => {
   const response = await axios.get(`${url}/logout`, { withCredentials: true });
 
   return response.data
 })
 
-export const fetchLogin = createAsyncThunk('auth/fetchLogin', async (credentials) => {
-  try {
-
+export const login = createAsyncThunk('auth/fetchLogin', async (credentials) => {
     const response = await axios.post(`${url}/login`, credentials, { withCredentials: true })
 
-    if (response.statusText !== "OK") {
-      const errorMessage = await response.statusText;
-      throw new Error(errorMessage);
-    }
-
-    const data = response.data
-
-    return data
-
-  } catch (error) {
-    // console.error(error)
-  }
+    return response.data
 });
 
 export const logoutSlice = createSlice({
@@ -33,15 +20,12 @@ export const logoutSlice = createSlice({
   initialState: {
     status: "idle",
   },
-  reducers: {
-
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchlogout.fulfilled, (state, action) => {
-        state.status = 'loading';
+      .addCase(logout.fulfilled, (state) => {
+        state.status = 'succeeded';
       })
-
   }
 })
 
@@ -49,21 +33,20 @@ export const loginSlice = createSlice({
   name: 'auth/login',
   initialState: {
     status: 'idle',
+    loggedIn : false
   },
   reducers: {
-
+    changeloggedIn : (state, action) => {
+      state.loggedIn = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchLogin.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchLogin.fulfilled, (state, action) => {
+      .addCase(login.fulfilled, (state, action) => {
         state.status = 'succeeded';
+        state.loggedIn = action.payload 
       })
-      .addCase(fetchLogin.rejected, (state, action) => {
-        state.status = 'failed';
-      });
   },
 });
 
+export const { changeloggedIn } =  loginSlice.actions

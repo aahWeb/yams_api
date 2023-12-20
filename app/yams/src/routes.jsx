@@ -1,12 +1,20 @@
-import { Link  } from "react-router-dom"
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom"
+import { changeloggedIn, logout } from "./store/auth";
 
 const routes = [
     { id: 1, path: "/", name: "Home" },
     { id: 2, path: "/contact", name: "Contact" },
-    { id: 2, path: "/login", name: "Login" },
 ]
 
-export default function Root() {
+export default function Root(props) {
+    const dispatch = useDispatch()
+
+    const handleLogout = () => {
+        dispatch(logout())
+        dispatch(changeloggedIn(false))
+        console.log(props, "icici")
+    }
 
     return (
         <>
@@ -17,6 +25,7 @@ export default function Root() {
                         <Link to={r.path}>{r.name}</Link>
                     </li>
                 ))}
+                { props?.loggedIn  && <button onClick={handleLogout}>Logout</button>}
             </ul>
         </nav>
         </>

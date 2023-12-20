@@ -1,31 +1,34 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useAuth } from "./hooks/useAuth";
-import { fetchMe } from "./store/me";
+import { useDispatch, useSelector } from "react-redux"
+import { useEffect, useState } from "react"
 
-import Pastries from "./Pastries";
+import Root from "./routes"
+import Login from "./Login"
+import Pastries from "./Pastries"
+import "./App.css"
 
-import "./App.css";
-import { redirect } from "react-router-dom";
+import { fetchMe } from "./store/me"
 
 function App() {
-  const dispatch = useDispatch()
-  const { user, message } = useSelector(s => s.me)
+  const { loggedIn } = useSelector((s) => s.login);
+  const { user } = useSelector((s) => s.me);
+  const [status, setStatus] = useState(false)
+  const dispatch = useDispatch();
+
+  // si on recherche on vérifie la connexion JWT
+  useEffect(() => {
+    dispatch(fetchMe());
+  }, []);
 
   useEffect(() => {
-      dispatch(fetchMe())
-  }, [])
-
-  useEffect(() => {
-    console.log(message)
-}, [ user ])
+    setStatus( Boolean(loggedIn || user)  )
+  }, [user, loggedIn]);
 
   return (
     <>
-      <h1 className="text-3xl font-bold underline">Pastries</h1>
-      <div className="flex justify-content">
-        { user == null && <Login />}
-        <Pastries />
+      <Root loggedIn={status} />
+      <div className="flex items-center justify-center">
+        {status === false && <Login />}
+        {status && <Pastries />}
       </div>
     </>
   );

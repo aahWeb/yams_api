@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from "react-redux";
-import { fetchLogin } from './store/auth';
+import { login } from './store/auth';
 import "./App.css";
 
 function Login() {
@@ -10,7 +10,9 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(fetchLogin({ email, password }))
+    if(email && password){
+      dispatch(login({ email, password }))
+    }
   }
 
   const handleEmail = (e) => setEmail(e.target.value)
