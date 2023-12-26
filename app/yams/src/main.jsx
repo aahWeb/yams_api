@@ -10,7 +10,7 @@ import {
 import Layout from "./components/Layout.jsx";
 
 import "./index.css";
-import Home from "./pages/Home.jsx";
+import App from "./pages/App.jsx";
 import Contact from "./pages/Contact.jsx";
 
 const router = createBrowserRouter([
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <Layout>
-        <Home />
+        <App />
       </Layout>
     ),
   },

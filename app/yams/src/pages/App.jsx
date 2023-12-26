@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import Login from "../Login"
 import Pastries from "../Pastries"
 
-const Home = () => {
+const App = () => {
     const { loggedIn } = useSelector((s) => s.login);
     const { user } = useSelector((s) => s.me);
 
@@ -19,4 +19,4 @@ const Home = () => {
     );
 }
 
-export default Home;
+export default App;
