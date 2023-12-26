@@ -7,11 +7,11 @@ import Pastries from "./Pastries"
 import "./App.css"
 
 import { fetchMe } from "./store/me"
+import { logout, changeloggedIn } from "./store/auth"
 
 function App() {
   const { loggedIn } = useSelector((s) => s.login);
   const { user } = useSelector((s) => s.me);
-  const [status, setStatus] = useState(false)
   const dispatch = useDispatch();
 
   // si on recherche on vérifie la connexion JWT
@@ -20,15 +20,27 @@ function App() {
   }, []);
 
   useEffect(() => {
-    setStatus( Boolean(loggedIn || user)  )
-  }, [user, loggedIn]);
+    if (user) {
+       dispatch( changeloggedIn(true) ) ;
+    }
+
+  }, [user]);
+
+  const handleLogout = () => {
+    dispatch(logout())
+    dispatch(changeloggedIn(false))
+  }
 
   return (
     <>
-      <Root loggedIn={status} />
+      <nav>
+        {loggedIn ? 'true' : 'false'}
+        <Root loggedIn={loggedIn} />
+        {loggedIn && <button onClick={handleLogout}>Logout</button>}
+      </nav>
       <div className="flex items-center justify-center">
-        {status === false && <Login />}
-        {status && <Pastries />}
+        {loggedIn === false && <Login />}
+        {loggedIn && <Pastries />}
       </div>
     </>
   );
