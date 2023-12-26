@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import Root from "./routes"
 import Login from "./Login"
@@ -14,17 +14,16 @@ function App() {
   const { user } = useSelector((s) => s.me);
   const dispatch = useDispatch();
 
-  // si on recherche on vérifie la connexion JWT
   useEffect(() => {
+    // si reload de la page, est-ce que l'on est connecté ?
     dispatch(fetchMe());
   }, []);
 
   useEffect(() => {
-    if (user) {
-       dispatch( changeloggedIn(true) ) ;
-    }
+    if (user) 
+      dispatch(changeloggedIn(true));
 
-  }, [user]);
+  }, [user, loggedIn]);
 
   const handleLogout = () => {
     dispatch(logout())
@@ -33,11 +32,7 @@ function App() {
 
   return (
     <>
-      <nav>
-        {loggedIn ? 'true' : 'false'}
-        <Root loggedIn={loggedIn} />
-        {loggedIn && <button onClick={handleLogout}>Logout</button>}
-      </nav>
+      <Root loggedIn={loggedIn} handle={handleLogout} />
       <div className="flex items-center justify-center">
         {loggedIn === false && <Login />}
         {loggedIn && <Pastries />}

@@ -3,6 +3,7 @@ import axios from "axios"
 
 const url = import.meta.env.VITE_REACT_APP_URL
 
+
 export const logout = createAsyncThunk('auth/fetchlogout', async () => {
   const response = await axios.get(`${url}/logout`, { withCredentials: true });
 

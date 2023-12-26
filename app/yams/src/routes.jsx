@@ -7,15 +7,20 @@ const routes = [
 
 export default function Root(props) {
 
+    const { handle, loggedIn } = props 
+  
     return (
         <>
+        <nav>
             <ul>
                 {routes.map((r) => (
                     <li key={r.id}>
                         <Link to={r.path}>{r.name}</Link>
                     </li>
                 ))}
+                { loggedIn  && <button onClick={() => handle()}>Logout</button>}
             </ul>
+        </nav>
         </>
     );
 }
