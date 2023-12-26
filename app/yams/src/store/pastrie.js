@@ -36,3 +36,5 @@ export const pastriesSlice = createSlice({
       });
   },
 });
+
+export const selectPastriesStatus = (state) => state.pastries.status

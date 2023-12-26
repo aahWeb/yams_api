@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Root from "./routes"
 import Login from "./Login"
 import Pastries from "./Pastries"
+import { selectPastriesStatus } from "./store/pastrie"
 import "./App.css"
 
 import { fetchMe } from "./store/me"
@@ -23,12 +24,15 @@ function App() {
     setStatus( Boolean(loggedIn || user)  )
   }, [user, loggedIn]);
 
+  console.log(status)
+  console.log(useSelector(selectPastriesStatus))
+
   return (
     <>
       <Root loggedIn={status} />
       <div className="flex items-center justify-center">
         {status === false && <Login />}
-        {status && <Pastries />}
+        {status && <Pastries  />}
       </div>
     </>
   );
