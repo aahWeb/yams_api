@@ -1,7 +1,7 @@
 import "./App.css"
 import Home from "./pages/Home";
 
-// App.jsx est un composant de haut niveau
+// Composant racine
 function App() {
 
   return (

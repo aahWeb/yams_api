@@ -4,7 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchMe } from "../store/me";
 import { changeloggedIn } from "../store/auth";
 
-// Hook qui permet de gérer la création d'un champ input voir dans le composant Form pour une implémentation
+/**
+ * HOC ( composant de haut niveau ) 
+ * Hooks permettant de vérifier si après rechargement de la page l'utilisateur est encore connecté
+ * - la méthode fetchMe fait une requête sur l'API avec le credentials si celui-ci existe ( cookie créé dans le navigateur), alors la connexion n'échoue pas et on met à true loggeIn 
+ * 
+ */
 const useMe = () => {
     const { user } = useSelector((s) => s.me)
     const dispatch = useDispatch()
