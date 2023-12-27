@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
 import { store } from "./store/store";
 import { Provider } from "react-redux";
 import {
@@ -8,22 +7,27 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import Root from './routes'
+import Layout from "./components/Layout.jsx";
 
 import "./index.css";
+import App from "./App.jsx";
+import Contact from "./pages/Contact.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <Layout>
+        <App />
+      </Layout>
+    ),
   },
   {
     path: "/contact",
     element: (
-      <>
-        <Root />
-        <p>Hello, laisse moi un message</p>
-      </>
+      <Layout>
+        <Contact />
+      </Layout>
     ),
   }
 ]);
