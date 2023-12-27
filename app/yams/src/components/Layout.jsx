@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { logout, changeloggedIn } from "../store/auth"
+import useMe from '../hooks/useMe'
 
 const routes = [
     { id: 1, path: "/", name: "Home" },
@@ -8,8 +9,9 @@ const routes = [
 ]
 
 const Layout = ({children}) => {
-    const { loggedIn } = useSelector((s) => s.login);
+    const { loggedIn } = useSelector((s) => s.login)
     const dispatch = useDispatch()
+    const { user } = useMe()
 
     const handleLogout = () => {
       dispatch(logout())

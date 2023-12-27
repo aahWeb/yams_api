@@ -10,7 +10,7 @@ import {
 import Layout from "./components/Layout.jsx";
 
 import "./index.css";
-import App from "./pages/App.jsx";
+import App from "./App.jsx";
 import Contact from "./pages/Contact.jsx";
 
 const router = createBrowserRouter([
