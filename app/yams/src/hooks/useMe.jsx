@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMe } from "../store/me";
 import { changeloggedIn } from "../store/auth";
@@ -26,10 +25,6 @@ const useMe = () => {
     return {
        user
     };
-};
-
-useMe.propTypes = {
-    
 };
 
 export default useMe;

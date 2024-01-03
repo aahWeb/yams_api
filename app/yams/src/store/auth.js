@@ -17,6 +17,9 @@ export const logout = createAsyncThunk('auth/fetchlogout', async () => {
   return response.data
 })
 
+/**
+ * withCredentials : true => envoie le cookie pour vérifier l'authentification
+ */
 export const login = createAsyncThunk('auth/fetchLogin', async (credentials) => {
     const response = await axios.post(`${url}/login`, credentials, { withCredentials: true })
 

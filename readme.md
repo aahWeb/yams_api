@@ -91,3 +91,17 @@ npm install js-cookie
 ```bash
 npm install react-router-dom localforage match-sorter sort-by
 ```
+
+## Générer le mot de passe
+
+```js
+// générer le mot de passe à mettre dans les données de type fichier
+// for(const u of users){
+//    console.log(u.email)
+//    bcrypt.hash( u.password || '', 10).then(console.log)
+// }
+```
+
+## TODO
+
+Ecrire les données dans le fichier

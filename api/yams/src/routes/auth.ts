@@ -15,6 +15,7 @@ const schema = new passwordValidator().is().min(8)
 const users: User[] = USERS;
 const router: Router = express.Router();
 
+// générer le mot de passe à mettre dans les données de type fichier
 // for(const u of users){
 //    console.log(u.email)
 //    bcrypt.hash( u.password || '', 10).then(console.log)
