@@ -1,47 +1,76 @@
 import express, { Router, Request, Response } from "express";
-import { PASTRIES } from "./../mocks";
 import { Pastrie } from "./../pastrie";
 import { authentified } from "../middleware";
 import { trimAll } from "../utils/helpers";
+import fs from 'fs/promises';
+import path from "path";
+import dotenv from 'dotenv';
+dotenv.config();
+
+const DATA_PASTRIES = process.env.DATA_PASTRIES || "pastries.json";
+const filePath = path.resolve(__dirname, '../Data', DATA_PASTRIES);
 
 const router: Router = express.Router();
 
 // optimisation dans le comptage des pastries 
-const pastries: Pastrie[] = PASTRIES;
+const pastries: Pastrie[] = [];
 
 // all pastries
-router.get("/pastries", authentified, function (req: Request, res: Response) {
-    
-    return res.json(pastries);
-});
+router.get("/pastries", authentified, async (req: Request, res: Response) => {
+    try {
+        const data = await fs.readFile(filePath, 'utf-8');
+        const pastries: Pastrie[] = JSON.parse(data)
 
-// id pastries
-router.get("/pastrie/:id", authentified, function (req: Request, res: Response) {
-    const id: string = req.params.id
-    const p: Pastrie | undefined = pastries.find(p => p.id == id);
-    
-    if (p) {
-        return res.json(p);
-    } else {
-        return res.status(404).json({
-            message: 'Pâtisserie non trouvée !'
-        });
+        return res.status(200).json(pastries);
+    } catch (error: any) {
+
+        res.status(400).send('Le fichier demandé n\'existe pas.');
     }
 });
 
-router.get("/pastries-search/:word", authentified, function (req: Request, res: Response) {
-    const word: string = req.params.word;
-    const re = new RegExp(word.trim(), 'i');
+// id pastries
+router.get("/pastrie/:id", authentified, async (req: Request, res: Response) => {
+    try {
+        const id: string = req.params.id
+        const data = await fs.readFile(filePath, 'utf-8');
+        const pastries: Pastrie[] = JSON.parse(data)
+        const pastrie: Pastrie | undefined = pastries.find(p => p.id == id)
 
-    // by quantity order 
-    const p: Pastrie[] = pastries.filter(p => p.name.match(re));
+        if (pastrie) {
 
-    if (p) {
-        res.json(p);
-    } else {
-        res.status(404).json({
-            message: 'Pâtisserie non trouvée !'
-        });
+            return res.json(pastrie);
+        } else {
+            return res.status(404).json({
+                message: 'Pâtisserie non trouvée !'
+            });
+        }
+
+    } catch (error: any) {
+
+        res.status(400).send('Le fichier demandé n\'existe pas.');
+    }
+});
+
+router.get("/pastries-search/:word", authentified, async (req: Request, res: Response) => {
+    try {
+        const word: string = req.params.word;
+        const re = new RegExp(word.trim(), 'i');
+
+        const data = await fs.readFile(filePath, 'utf-8');
+        const pastries: Pastrie[] = JSON.parse(data)
+        const pastrie: Pastrie | undefined = pastries.find(p => p.name.match(re))
+
+        if (pastrie) {
+
+            return res.json(pastrie);
+        } else {
+            return res.status(404).json({
+                message: 'Pâtisserie non trouvée !'
+            });
+        }
+    } catch (error: any) {
+
+        res.status(400).send('Le fichier demandé n\'existe pas.');
     }
 });
 
@@ -50,9 +79,11 @@ router.get("/pastries-search/:word", authentified, function (req: Request, res: 
  * Dans l'exemple ci-dessous on récupère deux pastries 
  * api/pastries/0/2
  */
-router.get("/pastries/:offset?/:limit", authentified, function (req: Request, res: Response) {
+router.get("/pastries/:offset?/:limit", async (req: Request, res: Response) =>{
     const offset: number = parseInt(req.params.offset);
     const limit: number = parseInt(req.params.limit);
+    const data = await fs.readFile(filePath, 'utf-8');
+    const pastries : Pastrie[]  = JSON.parse(data) 
 
     // on commence à offsetr et on prends limit elements
     const p: Pastrie[] = limit ? pastries.slice(offset).slice(0, limit) : pastries.slice(offset)
@@ -60,9 +91,11 @@ router.get("/pastries/:offset?/:limit", authentified, function (req: Request, re
 });
 
 // même requete mais ordonné
-router.get("/pastries/order-quantity/:offset?/:limit", authentified, function (req: Request, res: Response) {
+router.get("/pastries/order-quantity/:offset?/:limit", authentified, async  (req: Request, res: Response) => {
     const offset: number = parseInt(req.params.offset);
     const limit: number = parseInt(req.params.limit);
+    const data = await fs.readFile(filePath, 'utf-8');
+    const pastries : Pastrie[]  = JSON.parse(data);
 
     // by quantity order 
     pastries.sort((a, b) => b.quantity - a.quantity)
@@ -73,18 +106,23 @@ router.get("/pastries/order-quantity/:offset?/:limit", authentified, function (r
 });
 
 // count number pastries 
-router.get("/pastries-count", authentified, function (req: Request, res: Response) {
+router.get("/pastries-count", authentified, async (req: Request, res: Response)  =>{
+    const data = await fs.readFile(filePath, 'utf-8');
+    const pastries : Pastrie[]  = JSON.parse(data);
+
     return res.json(pastries.length);
 });
 
 // ajouter une pâtisserie dans le mock
-router.post("/pastrie", authentified, function (req: Request, res: Response) {
+router.post("/pastrie", authentified, async (req: Request, res: Response) =>{
     try {
-        const {  name, quantity, image,  choice } = trimAll(req.body);
-        const p: Pastrie = {  name, quantity, image, choice };
+        const { name, quantity, image, choice } = trimAll(req.body);
+        const p: Pastrie = { name, quantity, image, choice };
+        const data = await fs.readFile(filePath, 'utf-8');
+        const pastries : Pastrie[]  = JSON.parse(data);
 
         // on vérifie les champs obligatoires
-        if ( !p.name || !p.quantity) {
+        if (!p.name || !p.quantity) {
             return res.status(400).json({
                 message: 'Données invalides !'
             });
@@ -95,6 +133,8 @@ router.post("/pastrie", authentified, function (req: Request, res: Response) {
         p.id = (parseInt(lastId) + 1).toString();
 
         pastries.push(p);
+        await fs.writeFile(filePath, JSON.stringify(pastries), 'utf-8');
+
         return res.json(p);
     } catch (error) {
         return res.status(500).json(error);
@@ -102,10 +142,12 @@ router.post("/pastrie", authentified, function (req: Request, res: Response) {
 });
 
 // modifier une pâtisserie dans le mock
-router.put("/pastrie/:id", authentified, function (req: Request, res: Response) {
+router.put("/pastrie/:id", authentified, async (req: Request, res: Response) =>{
     try {
         const id: string = req.params.id;
-        const {  name, quantity, image,  choice } = trimAll(req.body);
+        const { name, quantity, image, choice } = trimAll(req.body);
+        const data = await fs.readFile(filePath, 'utf-8');
+        const pastries : Pastrie[]  = JSON.parse(data);
         const p: Pastrie | undefined = pastries.find(p => p.id == id);
 
         // on vérifie que la pâtisserie existe
@@ -120,6 +162,7 @@ router.put("/pastrie/:id", authentified, function (req: Request, res: Response) 
         p.quantity = quantity;
         p.image = image;
         p.choice = choice;
+        await fs.writeFile(filePath, JSON.stringify(pastries), 'utf-8');
 
         return res.json(p);
     } catch (error) {
@@ -128,9 +171,29 @@ router.put("/pastrie/:id", authentified, function (req: Request, res: Response) 
 });
 
 // DELETE API
+router.delete("/pastrie/:id", async (req: Request, res: Response) =>{
+    try {
+        const id: string = req.params.id;
+        const data = await fs.readFile(filePath, 'utf-8');
+        const pastries : Pastrie[]  = JSON.parse(data);
+        const lenPastries = pastries.length
+        const p: Pastrie[] | undefined = pastries.filter(p => p.id != id);
 
-// put pour le jeu accessible sans protection modifier 
+        // on vérifie que la pâtisserie existe
+        if (lenPastries == p.length) {
+            return res.status(404).json({
+                message: 'Pâtisserie non trouvée !'
+            });
+        }
+        
+        await fs.writeFile(filePath, JSON.stringify(p), 'utf-8');
 
+        return res.json(p);
+    } catch (error) {
+        
+        return res.status(500).json(error);
+    }
+})
 
 router.get('*', function (req: Request, res: Response) {
     return res.status(404).json({ error: "Not found" })
