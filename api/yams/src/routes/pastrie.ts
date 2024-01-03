@@ -10,13 +10,13 @@ const router: Router = express.Router();
 const pastries: Pastrie[] = PASTRIES;
 
 // all pastries
-router.get("/pastries", function (req: Request, res: Response) {
+router.get("/pastries", authentified, function (req: Request, res: Response) {
     
     return res.json(pastries);
 });
 
 // id pastries
-router.get("/pastrie/:id", function (req: Request, res: Response) {
+router.get("/pastrie/:id", authentified, function (req: Request, res: Response) {
     const id: string = req.params.id
     const p: Pastrie | undefined = pastries.find(p => p.id == id);
     
@@ -29,7 +29,7 @@ router.get("/pastrie/:id", function (req: Request, res: Response) {
     }
 });
 
-router.get("/pastries-search/:word", function (req: Request, res: Response) {
+router.get("/pastries-search/:word", authentified, function (req: Request, res: Response) {
     const word: string = req.params.word;
     const re = new RegExp(word.trim(), 'i');
 
@@ -50,7 +50,7 @@ router.get("/pastries-search/:word", function (req: Request, res: Response) {
  * Dans l'exemple ci-dessous on récupère deux pastries 
  * api/pastries/0/2
  */
-router.get("/pastries/:offset?/:limit", function (req: Request, res: Response) {
+router.get("/pastries/:offset?/:limit", authentified, function (req: Request, res: Response) {
     const offset: number = parseInt(req.params.offset);
     const limit: number = parseInt(req.params.limit);
 
@@ -60,7 +60,7 @@ router.get("/pastries/:offset?/:limit", function (req: Request, res: Response) {
 });
 
 // même requete mais ordonné
-router.get("/pastries/order-quantity/:offset?/:limit", function (req: Request, res: Response) {
+router.get("/pastries/order-quantity/:offset?/:limit", authentified, function (req: Request, res: Response) {
     const offset: number = parseInt(req.params.offset);
     const limit: number = parseInt(req.params.limit);
 
@@ -73,7 +73,7 @@ router.get("/pastries/order-quantity/:offset?/:limit", function (req: Request, r
 });
 
 // count number pastries 
-router.get("/pastries-count", function (req: Request, res: Response) {
+router.get("/pastries-count", authentified, function (req: Request, res: Response) {
     return res.json(pastries.length);
 });
 
