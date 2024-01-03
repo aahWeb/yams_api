@@ -11,11 +11,14 @@ const routes = [
 const Layout = ({children}) => {
     const { loggedIn } = useSelector((s) => s.login)
     const dispatch = useDispatch()
+    // useMe() reconnect l'utilisateur en cas de rechargement de la page
     const { user } = useMe()
 
     const handleLogout = () => {
-      dispatch(logout())
-      dispatch(changeloggedIn(false))
+        // appel de notre action asynchrone logout() pour déconnecter l'utilisateur
+        dispatch(logout())
+        // changement du status de loginSlice à false
+        dispatch(changeloggedIn(false))
     }
 
     return (
@@ -25,10 +28,12 @@ const Layout = ({children}) => {
                     <ul className='flex gap-4 justify-center'>
                         {routes.map(({id, path, name}) => <NavLink key={id} className={({isActive}) => isActive ? 'text-red-500' : null} to={path}>{name}</NavLink>)}
                     </ul>
-                    {loggedIn && <button onClick={handleLogout}>Logout</button>}
+                    { // si l'utilisateur est connécté, alors afficher le boutton de déconnection
+                    loggedIn && <button onClick={handleLogout}>Logout</button>}
                 </nav>
             </header>
-            {children}
+            { // la props children nous donne accés aux composent imbriqué dans Layout
+            children}
         </main>
     );
 }
