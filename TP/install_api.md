@@ -12,7 +12,7 @@ npm install express cors
 
 ## Fichier package.json 
 
-Attention pour la gestion des import/export dans TypeScript, respectez la configuration du tsconfig.json, pas la peine d'ajouter type : module dans le package.json
+Attention pour la gestion des import/export dans TypeScript, respectez la configuration du tsconfig.json, pas la peine d'ajouter "type": "module" dans le package.json
 
 ```json
 "scripts": {
