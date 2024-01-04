@@ -161,7 +161,7 @@ router.put("/pastrie/:id", authentified, async (req: CustomRequest, res: Respons
 });
 
 // DELETE API
-router.delete("/pastrie/:id", async (req: CustomRequest, res: Response) => {
+router.delete("/pastrie/:id", authentified, async (req: CustomRequest, res: Response) => {
         const id: string = req.params.id;
         const data = await fs.readFile(filePath, 'utf-8');
         const pastries = req.locals?.pastries
