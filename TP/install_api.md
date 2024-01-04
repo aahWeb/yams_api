@@ -10,9 +10,15 @@ npm install express cors
 
 ```
 
-## Fichier package.json 
+## Description de certains fichiers
+
+Ne touchez pas aux fichiers ci-dessous.
+
+### Fichier package.json 
 
 Attention pour la gestion des import/export dans TypeScript, respectez la configuration du tsconfig.json, pas la peine d'ajouter "type": "module" dans le package.json
+
+- le module **concurrently** permet de transpiler le code ts vers js et de watcher les changements dans les fichiers de l'API.
 
 ```json
 "scripts": {
@@ -20,7 +26,9 @@ Attention pour la gestion des import/export dans TypeScript, respectez la config
 },
 ```
 
-## Fichier tsconfig.json
+### Fichier tsconfig.json
+
+Nous définissons les règles pour transpiler le code vers le JS à partir de TS.
 
 ```json
 {

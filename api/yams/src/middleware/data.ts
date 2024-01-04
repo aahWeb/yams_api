@@ -2,22 +2,25 @@ import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fs from 'fs/promises';
 import dotenv from 'dotenv';
+import { Pastrie } from '../pastrie';
+
 dotenv.config();
 const DATA_PASTRIES = process.env.DATA_PASTRIES || "pastries.json";
 
-interface CustomRequest extends Request {
-    locals: {
-        data?: any; // Ajoutez d'autres propriétés au besoin
+export interface CustomRequest extends Request {
+    locals?: {
+        pastries: Pastrie[]; // Ajoutez d'autres propriétés au besoin
     };
 }
 
-// Middleware pour lire les données du fichier et les rendre disponibles dans les routes suivantes
-export const readDataMiddleware = async (req: CustomRequest, res: Response, next: NextFunction) => {
+// Middleware pour lire les données du fichier et les rendre disponibles dans les routes 
+// Chaque reponse est typée comme nous modifions la réponse standard de Node Request nous modifions son type en créant CustomRequest
+export const readPastries: any  = async (req: CustomRequest, res: Response, next: NextFunction) => {
     const filePath = path.resolve(__dirname, '../Data', DATA_PASTRIES);
 
     try {
         const data = await fs.readFile(filePath, 'utf-8');
-        req.locals = { data: JSON.parse(data) };
+        req.locals = { pastries: JSON.parse(data) };
         next();
     } catch (error: any) {
         console.error('Erreur lors de la lecture du fichier :', error);
@@ -31,3 +34,7 @@ export const readDataMiddleware = async (req: CustomRequest, res: Response, next
         }
     }
 };
+
+export const readUsers: any = async (req: CustomRequest, res: Response, next: NextFunction) => {
+
+}
