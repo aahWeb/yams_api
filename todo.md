@@ -5,3 +5,6 @@
 
 ## PASTRIES
 - Manque l'authentification sur la route delete
+
+## USERS
+- Créer la documentation pour se login et se logout
