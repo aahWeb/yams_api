@@ -8,7 +8,9 @@
 
 Certains points dans cette documentation vous sont détaillés à titre d'information, vous n'avez pas à les développer.
 
-1. ⓘ Utilisez l'API Yams développée en Express par nos soins. Voir le fichier **install_api**, récupérez l'API et consultez sa documentation : [api documentation](./documentation_api.md).
+1. ⓘ Utilisez l'API Yams développée en Express par nos soins. Voir le fichier **install_api**, récupérez l'API et consultez ses documentations :
+    1. API pour le jeu non sécurisé  [api game](./documentation_game_api.md).
+    1. CRUD API **sécurisé** [api crud](./documentation_crud_api.md).
 
 2. ⓘ Les données de l'API (pâtisseries) persistent dans un fichier **pastries.json**. Les données des utilisateurs sont stockées sur le serveur et ne sont pas modifiées.
 
