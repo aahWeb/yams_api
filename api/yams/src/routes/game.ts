@@ -1,9 +1,13 @@
 import express, { Router, Request, Response } from "express"
-import fs from 'fs/promises';
-import path from "path";
+
+import { modifyQuantityPastries } from "../utils/helpers";
+import { CustomRequest } from "../middleware/data";
 import { Pastrie } from "./../pastrie";
 
+import fs from 'fs/promises';
 import dotenv from 'dotenv';
+import path from "path";
+
 dotenv.config();
 
 const DATA_PASTRIES = process.env.DATA_PASTRIES || "pastries.json";
@@ -11,41 +15,53 @@ const filePath = path.resolve(__dirname, '../Data', DATA_PASTRIES);
 
 const router: Router = express.Router();
 
-router.get('/pastries', async (req: Request, res: Response) => {
-    try {
-        const data = await fs.readFile(filePath, 'utf-8');
-        const pastries : Pastrie[]  = JSON.parse(data) 
+// Endpoint pour récupérer toutes les pastries
+router.get('/pastries', async (req: CustomRequest, res: Response) => {
+    const pastries: Pastrie[] | undefined = req.locals?.pastries
 
-        return res.status(200).json(pastries);
-    } catch (error: any) {
-
-        res.status(400).send('Le fichier demandé n\'existe pas.');
-    }
+    return res.status(200).json(pastries);
 });
 
-router.get('/pastrie/:id', async (req: Request, res: Response) => {
-    try {
-        const id: string = req.params.id
-        const data = await fs.readFile(filePath, 'utf-8');
-        const pastries : Pastrie[]  = JSON.parse(data) 
-        const pastrie: Pastrie | undefined = pastries.find(p => p.id == id)
+// Endpoint pour récupérer une pastrie avec son id 
+router.get('/pastrie/:id', async (req: CustomRequest, res: Response) => {
+    const id: string = req.params.id
+    const pastries: Pastrie[] | undefined = req.locals?.pastries
 
-        if (pastrie) {
-            pastrie.choice = true 
-           
-            await fs.writeFile(filePath, JSON.stringify(pastries), 'utf-8');
+    const pastrie: Pastrie | undefined = pastries?.find(p => p.id == id)
 
-            return res.json(pastrie);
-        } else {
-            return res.status(404).json({
-                message: 'Pâtisserie non trouvée !'
-            });
-        }
+    // error first
+    if (pastrie == undefined) {
 
-    } catch (error: any) {
-
-        res.status(400).send('Le fichier demandé n\'existe pas.');
+        return res.status(404).json({
+            message: 'Pâtisserie non trouvée !'
+        });
     }
+
+    return res.json(pastrie);
+});
+
+// Endpoint pour récupérer des/une pastrie(s) gagnées avec mise à jour des données
+router.get('/win-pastries/:quantity', async (req: CustomRequest, res: Response) => {
+    const quantity: number = parseInt(req.params.quantity)
+    let pastries: Pastrie[] | undefined = req.locals?.pastries
+
+    // error first
+    if (isNaN(quantity) || quantity <= 0)
+        return res.status(400).json(
+            { message: 'La quantité doit être un nombre entier positif.' }
+        );
+
+     // error first
+    if (pastries == undefined)
+        return res.status(404).json({
+            message: 'Pâtisserie(s) non trouvée !'
+        });
+
+    // aléatoire sur les pâtisseries encore à gagner
+    pastries = modifyQuantityPastries(pastries, quantity)
+    await fs.writeFile(filePath, JSON.stringify(pastries), 'utf-8');
+
+    return res.json(pastries);
 });
 
 export default router;

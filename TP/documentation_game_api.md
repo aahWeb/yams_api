@@ -13,7 +13,8 @@ L'URL de base de l'API est définie par le chemin relatif `/api`.
 ### Endpoints disponibles
 
 1. **Récupérer la liste des pâtisseries**
-   - **Endpoint :** `/pastries`
+
+   - **Endpoint :** `/game/pastries`
    - **Méthode :** `GET`
    - **Description :** Récupère la liste complète des pâtisseries.
    - **Réponses :**
@@ -21,7 +22,8 @@ L'URL de base de l'API est définie par le chemin relatif `/api`.
      - Code 400 : Erreur en cas de problème lors de la lecture du fichier de données.
 
 2. **Récupérer une pâtisserie par ID**
-   - **Endpoint :** `/pastrie/:id`
+
+   - **Endpoint :** `/game/pastrie/:id`
    - **Méthode :** `GET`
    - **Description :** Récupère les détails d'une pâtisserie spécifique en fonction de son ID.
    - **Paramètres URL :**
@@ -31,13 +33,24 @@ L'URL de base de l'API est définie par le chemin relatif `/api`.
      - Code 404 : La pâtisserie avec l'ID spécifié n'a pas été trouvée.
      - Code 400 : Erreur en cas de problème lors de la lecture ou de l'écriture du fichier de données.
 
+3. **Récupérer des pâtisseries gagnées avec mise à jour des données**
+   - **Endpoint :** `/game/win-pastries/:quantity`
+   - **Méthode :** `GET`
+   - **Description :** Récupère une ou plusieurs pâtisseries gagnées, avec mise à jour des données pour indiquer qu'elles ont été gagnées.
+   - **Paramètres URL :** `quantity` (number): La quantité de pâtisseries à gagner.
+   - **Réponses :**
+     - 200 OK: Retourne la liste des pâtisseries avec les données mises à jour.
+     - 400 Bad Request: Si la quantité spécifiée n'est pas un nombre entier positif.
+     - 404 Not Found: Si aucune pâtisserie n'est trouvée.
+
 ## Exemples d'utilisation
 
 ### Récupérer la liste des pâtisseries
 
 - **Requête :**
   ```http
-  GET /api/pastries
+  GET /game/pastries
+  ```
 
 ```json
 [
@@ -54,16 +67,15 @@ L'URL de base de l'API est définie par le chemin relatif `/api`.
     "quantity": 15,
     "image": "chocolate-eclair.jpg",
     "choice": true
-  },
+  }
   // ... autres pâtisseries
 ]
-
 ```
 
 ### Récupérer une pâtisserie par ID
 
 ```txt
-GET /api/pastrie/2
+GET /game/pastrie/2
 ```
 
 ```json
@@ -74,7 +86,6 @@ GET /api/pastrie/2
   "image": "chocolate-eclair.jpg",
   "choice": true
 }
-
 ```
 
 - réponse Code 404
@@ -83,6 +94,67 @@ GET /api/pastrie/2
 {
   "message": "Pâtisserie non trouvée !"
 }
+```
+
+### Récupérer pâtisseries en modifiant les quantités
+
+```txt
+GET /game/win-pastries/10
+```
+
+- Réponse Code 200 OK
+
+```json
+[
+  {
+    "id": "1",
+    "name": "Fondant supreme",
+    "image": "http://placehold.it/32x32",
+    "quantity": 0,
+    "quantityWon": 4,
+    "choice": true
+  },
+  {
+    "id": "2",
+    "name": "Cake tout Chocolat",
+    "image": "http://placehold.it/32x32",
+    "quantity": 0,
+    "quantityWon": 3,
+    "choice": true
+  },
+  {
+    "id": "3",
+    "name": "Cake Framboise chocolat",
+    "image": "http://placehold.it/32x32",
+    "quantity": 1,
+    "quantityWon": 3,
+    "choice": true
+  },
+  {
+    "id": "4",
+    "name": "Brioche sucrée avec chocolat",
+    "image": "http://placehold.it/32x32",
+    "quantity": 6,
+    "quantityWon": 0,
+    "choice": false
+  },
+
+// les autres patisseries
+
+]
+
+```
+
+- Code 400 (error first type)
+
+```json
+ { "message": "La quantité doit être un nombre entier positif." }
+```
+
+- Code 404 (error first type)
+
+```json
+ { "message": "Pâtisserie(s) non trouvée !." }
 ```
 
 ### Remarques
