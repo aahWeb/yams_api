@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
-import router from "./routes/index";
 import { readPastries } from "./middleware/data"
 import cookieParser from 'cookie-parser';
+import router from "./routes/index";
 import dotenv from 'dotenv';
 dotenv.config();
 

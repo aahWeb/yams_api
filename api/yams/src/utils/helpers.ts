@@ -10,6 +10,8 @@ export const trimAll = (data: any) => {
 
 export const modifyQuantityPastries = (pastries : Pastrie[], quantity : number) : Pastrie[] => {
 
+    pastries?.sort(_ => Math.random() - .5)
+
     const pastriesQ : Pastrie[] = pastries?.filter( p => p.quantity > 0 ) || []
     const pastriesWQ : Pastrie[] = pastries?.filter( p => p.quantity == 0 ) || []
 
