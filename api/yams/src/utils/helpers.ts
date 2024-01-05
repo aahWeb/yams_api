@@ -19,7 +19,6 @@ export const modifyQuantityPastries = (pastries : Pastrie[], quantity : number) 
             pastrie.quantity -= 1
             pastrie.quantityWon = 1 + ( pastrie?.quantityWon || 0 )
             quantity -= 1
-            console.log(pastrie.quantity)
         }
         pastrie.choice = true 
     }

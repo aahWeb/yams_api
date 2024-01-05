@@ -56,6 +56,56 @@ router.post('/login', (req: Request, res: Response) => {
     });
 });
 
+// Endpoint pour s'enregistrer, créer un compte
+router.post("/register", function (req: Request, res: Response) {
+    const { email, name, password }: User = trimAll(req.body);
+
+    if (name.length < 3) {
+        return res.status(400).json({ message: "Le nom doit avoir au moins 3 caractères" });
+    }
+
+    if (!password) {
+        return res.status(400).json({ message: "Le mot de passe est obligatoire" });
+    }
+
+    // on vérifie si le mot de passe est conforme au schéma
+    if (!schema.validate(password)) {
+        return res.status(400).json({ message: "Le mot de passe doit faire minimum 8 caractères et avoir des chiffres" });
+    }
+
+    // on vérifie si l'email est valide
+    if (!validator.validate(email)) {
+        return res.status(400).json({ message: "L'adresse e-mail saisit est invalide" });
+    }
+
+    // on recherche l'utilisateur dans le mock
+    const user: User | undefined = users.find(user => user.name == name || user.email == email);
+    if (user) {
+        if (user.name == name) {
+            return res.status(400).json({ message: "Le nom d'utilisateur est déjà prit" });
+        } else {
+            return res.status(400).json({ message: "L'adresse email est déjà prit" });
+        }
+    }
+
+    // hash password
+    bcrypt.hash(password, 10).then((hash: string) => {
+
+        // on récupère le dernier id de la liste des utilisateurs
+        const lastId: string = users[users.length - 1]?.id || "0";
+
+        const user: User = {
+            id: parseInt(lastId) + 1 + "", // on incrémente l'id de 1
+            name,
+            email,
+            password: hash
+        };
+        users.push(user);
+        return res.status(200).json({ message: "Vous êtes bien inscrit !" });
+    });
+
+});
+
 // Endpoint pour se déconnecter 
 router.get('/logout', authentified, function (req: Request, res: Response) {
     res.clearCookie('token');

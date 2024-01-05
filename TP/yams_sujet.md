@@ -11,6 +11,7 @@ Certains points dans cette documentation vous sont détaillés à titre d'inform
 1. ⓘ Utilisez l'API Yams développée en Express par nos soins. Voir le fichier **install_api**, récupérez l'API et consultez ses documentations :
     1. API pour le jeu non sécurisé  [api game](./documentation_game_api.md).
     1. CRUD API **sécurisé** [api crud](./documentation_crud_api.md).
+    1. user **sécurisé** pour la route logout uniquement [user](./documentation_authentification.md).
 
 2. ⓘ Les données de l'API (pâtisseries) persistent dans un fichier **pastries.json**. Les données des utilisateurs sont stockées sur le serveur et ne sont pas modifiées.
 
@@ -22,11 +23,15 @@ Certains points dans cette documentation vous sont détaillés à titre d'inform
 
 ```plaintext
 User React -> Auth -> Serveur API YAMS -> Émission du JWT (création du cookie) 
--> Signature Numérique -> Transmission au Client (envoi du cookie) 
--> Requêtes au Serveur (envoi du cookie) -> Validation de la Signature (Côté Serveur) 
--> Décodage du JWT (Côté Serveur) -> Vérification des Autorisations 
--> Accès à la Ressource Protégée -> Expiration du JWT (la validité du cookie est fixée à 1h)
 
+-> Signature Numérique -> Transmission au Client (envoi du cookie) 
+
+-> Requêtes au Serveur (envoi du cookie) -> Validation de la Signature (Côté Serveur) 
+
+-> Décodage du JWT (Côté Serveur) -> Vérification des Autorisations 
+
+-> Accès à la Ressource Protégée -> Expiration du JWT (la validité du cookie est fixée à 1h)
+```
 
 ```js
 import cors from "cors";
@@ -53,7 +58,6 @@ Si on veut re-tester le jeu, il faut rafraîchir la page.
 
 1. Brelan ( 3 dés identiques ), gagne 1 pâtisserie.
 1. Carré ( 4 dés identiques ), gagne 2 pâtisseries.
-
 
 ## Mise en place du projet
 
