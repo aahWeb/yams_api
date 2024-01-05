@@ -94,14 +94,19 @@ npm install react-router-dom localforage match-sorter sort-by
 
 ## Générer le mot de passe
 
+Importez bcrypt 
+
 ```js
+import bcrypt from 'bcrypt';
+
 // générer le mot de passe à mettre dans les données de type fichier
-// for(const u of users){
-//    console.log(u.email)
-//    bcrypt.hash( u.password || '', 10).then(console.log)
-// }
+const users = [{'password' : 'alice'}]
+for(const u of users){
+   bcrypt.hash( u.password || '', 10).then(console.log)
+}
 ```
 
-## TODO
+## Les données de l'API
 
-Ecrire les données dans le fichier
+- les pastries persistent dans un fichier pastries.json
+- les données utilisateurs sont dans un fichier users.ts ou users.json et ne persiste qu'en mémoire sur le serveur Node
