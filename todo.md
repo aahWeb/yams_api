@@ -14,6 +14,8 @@ Si on ne peut plus tirer de patisserie on retourne un tableau vide.
 `/game/win-pastries/:quantity`
 ```
 
+--> OK
+
 ## PASTRIES
 - Manque l'authentification sur la route delete --> OK
 
