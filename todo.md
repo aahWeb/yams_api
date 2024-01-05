@@ -6,6 +6,10 @@
 
 - Endpoint pour récupérer 1 ou plusieurs patisseries gagnées (nombre à passer en paramètre) --> cette route doit décrémenter la qty des patisseries retournées --> OK
 
+Principe pour récupérer des patisseries gagnantes on en tire de manière aléatoire du nombre de patisseries à gagner. 
+
+Si on ne peut plus tirer de patisserie on retourne un tableau vide.
+
 ```txt
 `/game/win-pastries/:quantity`
 ```

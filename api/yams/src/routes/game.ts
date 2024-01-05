@@ -58,10 +58,10 @@ router.get('/win-pastries/:quantity', async (req: CustomRequest, res: Response) 
         });
 
     // aléatoire sur les pâtisseries encore à gagner
-    pastries = modifyQuantityPastries(pastries, quantity)
+    const pastriesWin : Pastrie[] = modifyQuantityPastries(pastries, quantity)
     await fs.writeFile(filePath, JSON.stringify(pastries), 'utf-8');
 
-    return res.json(pastries);
+    return res.json(pastriesWin);
 });
 
 export default router;
