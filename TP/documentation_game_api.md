@@ -36,7 +36,8 @@ L'URL de base de l'API est définie par le chemin relatif `/api`.
 3. **Récupérer des pâtisseries gagnées avec mise à jour des données**
    - **Endpoint :** `/game/win-pastries/:quantity`
    - **Méthode :** `GET`
-   - **Description :** Récupère une ou plusieurs pâtisseries gagnées, avec mise à jour des données pour indiquer qu'elles ont été gagnées.
+   - **Description :** Récupère la quantité des patisseries gagnées égale à la quantité passée en paramètre de la route si il reste suffisamment de quantité de patisseries, et sinon retourne un tableau vide.
+   - **Données modifiées :** les champs de chaque patisserie gagnée suivants sont modifiés si elles sont gagnées quantity, choice, quantityWon. 
    - **Paramètres URL :** `quantity` (number): La quantité de pâtisseries à gagner.
    - **Réponses :**
      - 200 OK: Retourne la liste des pâtisseries avec les données mises à jour.
@@ -99,7 +100,7 @@ GET /game/pastrie/2
 ### Récupérer pâtisseries en modifiant les quantités
 
 ```txt
-GET /game/win-pastries/10
+GET /game/win-pastries/4
 ```
 
 - Réponse Code 200 OK
@@ -110,33 +111,33 @@ GET /game/win-pastries/10
     "id": "1",
     "name": "Fondant supreme",
     "image": "http://placehold.it/32x32",
-    "quantity": 0,
-    "quantityWon": 4,
+    "quantity": 3,
+    "quantityWon": 1,
     "choice": true
   },
   {
     "id": "2",
     "name": "Cake tout Chocolat",
     "image": "http://placehold.it/32x32",
-    "quantity": 0,
-    "quantityWon": 3,
+    "quantity": 2,
+    "quantityWon": 1,
     "choice": true
   },
   {
     "id": "3",
     "name": "Cake Framboise chocolat",
     "image": "http://placehold.it/32x32",
-    "quantity": 1,
-    "quantityWon": 3,
+    "quantity": 3,
+    "quantityWon": 1,
     "choice": true
   },
   {
     "id": "4",
     "name": "Brioche sucrée avec chocolat",
     "image": "http://placehold.it/32x32",
-    "quantity": 6,
-    "quantityWon": 0,
-    "choice": false
+    "quantity": 5,
+    "quantityWon": 1,
+    "choice": true
   },
 
 // les autres patisseries
