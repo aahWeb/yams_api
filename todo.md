@@ -15,3 +15,7 @@
 
 ## USERS
 - Créer la documentation pour se login et se logout --> OK
+
+## Images
+
+- modifier les noms des images dans le fichier pastries.json dans Data pour correspondre aux images sur le serveur React ?
