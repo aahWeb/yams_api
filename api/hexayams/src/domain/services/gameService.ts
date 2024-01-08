@@ -3,17 +3,20 @@ import { pastrieRepository } from '../../infrastructure/repositories/pastrieRepo
 import { modifyQuantityPastries } from '../../utils/helpers';
 import { Pastrie } from '../entities/Pastrie';
 
-const gameService = {
+export const gameService = {
     async winPastries(quantity: number): Promise<Pastrie[]> {
-        let pastries = await pastriesService.getAllPastries();
-        if (isNaN(quantity) || quantity <= 0) {
-            throw new Error('La quantité doit être un nombre entier positif.');
-        }
-
-        pastries = modifyQuantityPastries(pastries, quantity);
-        await pastrieRepository.writePastries(pastries);
-        return pastries;
+        return new Promise(async (resolve, reject) => {
+            if (isNaN(quantity) || quantity <= 0) {
+                reject(new Error('La quantité doit être un nombre entier positif.'));
+            }
+            try {
+                const pastries = await pastrieRepository.readPastries();
+                const pastriesWin = modifyQuantityPastries(pastries, quantity);
+                await pastrieRepository.writePastries(pastries);
+                resolve(pastriesWin);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 };
-
-export default gameService;
