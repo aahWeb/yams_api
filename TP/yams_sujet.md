@@ -12,7 +12,7 @@ Certains points dans cette documentation vous sont détaillés à titre d'inform
     1. API pour le jeu non sécurisé  [api game](./documentation_game_api.md).
     1. CRUD API **sécurisé** [api crud](./documentation_crud_api.md).
     1. user **sécurisé** pour la route logout uniquement [user](./documentation_authentification.md).
-    1. me **sécurisé ou pas** tester si l'utilisateur est toujours connecté [me](./documentation_me.md).
+    1. me **sécurisé ou pas** tester si l'utilisateur est toujours connecté [me](./documentation_me_api.md).
 
 2. ⓘ Les données de l'API (pâtisseries) persistent dans un fichier **pastries.json**. Les données des utilisateurs sont stockées sur le serveur et ne sont pas modifiées.
 
