@@ -16,7 +16,7 @@ Cette API permet de savoir si un utilisateur est connecté.
     - **Réponses** :
         - Code 200 : Succès de l'authentification.
 
-2. Déconnexion (logout)
+2. Savoir si on est connecté 
 
     - **Endpoint** : `/me``
     - **Méthode :** `GET`
