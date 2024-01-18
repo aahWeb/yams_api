@@ -2,14 +2,14 @@ import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fs from 'fs/promises';
 import dotenv from 'dotenv';
-import { Pastrie } from '../pastrie';
+import { Pastry } from '../pastry';
 
 dotenv.config();
 const DATA_PASTRIES = process.env.DATA_PASTRIES || "pastries.json";
 
 export interface CustomRequest extends Request {
     locals?: {
-        pastries: Pastrie[]; // Ajoutez d'autres propriétés au besoin
+        pastries: Pastry[]; // Ajoutez d'autres propriétés au besoin
     };
 }
 

@@ -22,7 +22,7 @@ const router: Router = express.Router();
 // Endpoint pour vérifier email et le password pour se connecter
 router.post('/login', (req: Request, res: Response) => {
     const { email, password } = trimAll(req.body); // récupération des données du formulaire de login (email et password)
-    
+    console.log({ email, password })
     if (!email || !password) {
         return res.status(400).json({ message: "Veuillez remplir tous les champs" });
     }

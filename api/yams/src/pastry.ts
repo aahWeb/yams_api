@@ -1,4 +1,4 @@
-export interface Pastrie {
+export interface Pastry {
   id?: string;
   name: string;
   quantity: number;

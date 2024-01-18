@@ -1,19 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllPastries } from "./store/pastrie";
+import { fetchAllPastries } from "./store/pastry";
 
 import "./App.css";
 
 function Pastries() {
     const dispatch = useDispatch();
     const { pastries, status, error } = useSelector(state => state.pastries);
+    const { pastry, id } = useSelector(state => state.pastry);
+    const lastId = useRef(null);
 
     useEffect(() => {
-        if (status === "idle") {
+        console.log("montage", status)
+        if (status === "idle") 
             dispatch(fetchAllPastries());
-        }
+
+        lastId.current = id 
     }, []);
+
+    useEffect(() => {
+        console.log("id new")
+        if( id !== lastId.current)
+            dispatch(fetchAllPastries());
+    }, [id]);
 
     if (status === "error") return <p>Error {error}</p>;
 

@@ -3,11 +3,12 @@ import express, { Router, Request, Response } from "express";
 import { CustomRequest } from "../middleware/data";
 import { authentified } from "../middleware";
 import { trimAll } from "../utils/helpers";
-import { Pastrie } from "./../pastrie";
+import { Pastry } from "../pastry";
 
 import fs from 'fs/promises';
 import dotenv from 'dotenv';
 import path from "path";
+import { PASTRIES } from "../mocks";
 
 dotenv.config();
 
@@ -18,18 +19,18 @@ const router: Router = express.Router();
 
 // Endpoint pour récupérer toutes les pastries
 router.get("/pastries", authentified, async (req: CustomRequest, res: Response) => {
-    const pastries: Pastrie[] | undefined = req.locals?.pastries
+    const pastries: Pastry[] | undefined = req.locals?.pastries
 
     return res.status(200).json(pastries);
 });
 
 // Endpoint pour récupérer une pastrie par son ID
-router.get("/pastrie/:id", authentified, async (req: CustomRequest, res: Response) => {
+router.get("/pastry/:id", authentified, async (req: CustomRequest, res: Response) => {
 
     const id: string = req.params.id
-    const pastries : Pastrie[] | undefined = req.locals?.pastries
+    const pastries: Pastry[] | undefined = req.locals?.pastries
 
-    const pastrie: Pastrie | undefined = pastries?.find(p => p.id == id)
+    const pastrie: Pastry | undefined = pastries?.find(p => p.id == id)
 
     if (pastrie) {
 
@@ -46,8 +47,8 @@ router.get("/pastries-search/:word", authentified, async (req: CustomRequest, re
     const word: string = req.params.word;
     const re = new RegExp(word.trim(), 'i');
 
-    const pastries : Pastrie[] | undefined = req.locals?.pastries
-    const pastrie: Pastrie | undefined = pastries?.find(p => p.name.match(re))
+    const pastries: Pastry[] | undefined = req.locals?.pastries
+    const pastrie: Pastry | undefined = pastries?.find(p => p.name.match(re))
 
     if (pastrie) {
 
@@ -63,9 +64,9 @@ router.get("/pastries-search/:word", authentified, async (req: CustomRequest, re
 router.get("/pastries/:offset?/:limit", async (req: CustomRequest, res: Response) => {
     const offset: number = parseInt(req.params.offset);
     const limit: number = parseInt(req.params.limit);
-    const pastries : Pastrie[] | undefined = req.locals?.pastries
+    const pastries: Pastry[] | undefined = req.locals?.pastries
 
-    const p: Pastrie[] | undefined = limit ? pastries?.slice(offset).slice(0, limit) : pastries?.slice(offset)
+    const p: Pastry[] | undefined = limit ? pastries?.slice(offset).slice(0, limit) : pastries?.slice(offset)
 
     return res.json(p);
 });
@@ -74,27 +75,27 @@ router.get("/pastries/:offset?/:limit", async (req: CustomRequest, res: Response
 router.get("/pastries/order-quantity/:offset?/:limit", authentified, async (req: CustomRequest, res: Response) => {
     const offset: number = parseInt(req.params.offset);
     const limit: number = parseInt(req.params.limit);
-    const pastries : Pastrie[] | undefined = req.locals?.pastries
+    const pastries: Pastry[] | undefined = req.locals?.pastries
 
     // by quantity order 
     pastries?.sort((a, b) => b.quantity - a.quantity)
 
-    const p: Pastrie[] | undefined = limit ? pastries?.slice(offset).slice(0, limit) : pastries?.slice(offset)
+    const p: Pastry[] | undefined = limit ? pastries?.slice(offset).slice(0, limit) : pastries?.slice(offset)
     return res.json(p);
 });
 
 // Endpoint pour récupérer le nombre de pastries 
 router.get("/pastries-count", authentified, async (req: CustomRequest, res: Response) => {
-    const pastries : Pastrie[] | undefined = req.locals?.pastries
+    const pastries: Pastry[] | undefined = req.locals?.pastries
 
     return res.json(pastries?.length || 0);
 });
 
 // Endpoint pour ajouter une pastrie
-router.post("/pastrie", authentified, async (req: CustomRequest, res: Response) => {
+router.post("/pastry", authentified, async (req: CustomRequest, res: Response) => {
     const { name, quantity, image, choice } = trimAll(req.body);
-    const p: Pastrie = { name, quantity, image, choice };
-    const pastries : Pastrie[] | undefined = req.locals?.pastries
+    const p: Pastry = { name : name ?? null , quantity : quantity ?? null, image : image ?? null, choice : choice ?? false } ;
+    const pastries: Pastry[] | undefined = req.locals?.pastries
 
     // on vérifie les champs obligatoires
     if (!p.name || !p.quantity) {
@@ -104,8 +105,9 @@ router.post("/pastrie", authentified, async (req: CustomRequest, res: Response) 
     }
     if (pastries) {
         // on récupère le dernier id et on incrémente
-        const lastId: string = pastries[pastries.length - 1]?.id || "0";
-        p.id = (parseInt(lastId) + 1).toString();
+        const lastId : number = pastries.map( p => ( {
+             ...p, id : parseInt( p?.id || "0" )  } ) ).sort( (p, q) =>  - ( p.id - q.id) )[0]?.id || 0
+        p.id = (lastId + 1).toString();
 
         pastries.push(p);
         await fs.writeFile(filePath, JSON.stringify(pastries), 'utf-8');
@@ -119,12 +121,12 @@ router.post("/pastrie", authentified, async (req: CustomRequest, res: Response) 
 });
 
 // Endpoint pour modifier une pastrie 
-router.put("/pastrie/:id", authentified, async (req: CustomRequest, res: Response) => {
+router.put("/pastry/:id", authentified, async (req: CustomRequest, res: Response) => {
     const id: string = req.params.id;
     const { name, quantity, image, choice } = trimAll(req.body);
-    const pastries : Pastrie[] | undefined = req.locals?.pastries
+    let pastries: Pastry[] | undefined = req.locals?.pastries
 
-    const p: Pastrie | undefined = pastries?.find(p => p.id == id);
+    let p: Pastry | undefined = pastries?.find(p => p.id == id);
 
     // on vérifie que la pâtisserie existe
     if (!p) {
@@ -133,22 +135,34 @@ router.put("/pastrie/:id", authentified, async (req: CustomRequest, res: Respons
         });
     }
 
-    // on assigne les nouvelles valeurs à la pâtisserie
-    p.name = name;
-    p.quantity = quantity;
-    p.image = image;
-    p.choice = choice;
-    await fs.writeFile(filePath, JSON.stringify(pastries), 'utf-8');
+    // mettre à jour les données
+    pastries = pastries?.map(p => {
+        if (p.id == id) {
+
+            return ({
+                ...p,
+                name: name ?? p.name,
+                quantity: quantity ?? p.quantity,
+                image: image ?? p.image,
+                choice: choice ?? p.choice
+            })
+        }
+
+        return p
+    });
+    
+    if( pastries )
+        await fs.writeFile(filePath, JSON.stringify(pastries), 'utf-8');
 
     return res.json(p);
 });
 
 // Endpoint pour supprimer une pastrie avec son id 
-router.delete("/pastrie/:id", authentified, async (req: CustomRequest, res: Response) => {
+router.delete("/pastry/:id", authentified, async (req: CustomRequest, res: Response) => {
     const id: string = req.params.id;
     const pastries = req.locals?.pastries
     const lenPastries: number = pastries?.length || 0
-    const p: Pastrie[] | undefined = pastries?.filter(p => p.id != id);
+    const p: Pastry[] | undefined = pastries?.filter(p => p.id != id);
 
     // on vérifie que la pâtisserie existe
     if (lenPastries == p?.length) {

@@ -110,3 +110,7 @@ for(const u of users){
 
 - les pastries persistent dans un fichier pastries.json
 - les données utilisateurs sont dans un fichier users.ts ou users.json et ne persiste qu'en mémoire sur le serveur Node
+
+```bash
+npm install multer @types/multer
+```

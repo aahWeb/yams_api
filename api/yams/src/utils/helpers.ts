@@ -1,4 +1,4 @@
-import { Pastrie } from "../pastrie";
+import { Pastry } from "../pastry";
 
 export const trimAll = (data: any) => {
     for (const key in data) {
@@ -8,7 +8,7 @@ export const trimAll = (data: any) => {
     return data;
 };
 
-export const modifyQuantityPastries = (pastries : Pastrie[], quantity : number) : Pastrie[] => {
+export const modifyQuantityPastries = (pastries : Pastry[], quantity : number) : Pastry[] => {
 
     // on récupère les patisseries dont la qty est > 0
     pastries  = pastries?.filter( p => p.quantity > 0 ) || []

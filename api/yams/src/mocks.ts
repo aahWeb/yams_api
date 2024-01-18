@@ -1,7 +1,7 @@
-import { Pastrie } from './pastrie';
+import { Pastry } from './pastry';
 import { User, Status } from './user';
 
-export const PASTRIES: Pastrie[] = [
+export const PASTRIES: Pastry[] = [
     {
         "id": "1",
         "name": "Fondant supreme",

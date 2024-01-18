@@ -8,7 +8,7 @@ Bienvenue dans la documentation de l'API Pastries, une API simple pour la gestio
 
 ### URL de base
 
-L'URL de base de l'API est définie par le chemin relatif `/api`.
+L'URL de base de l'API est définie par le chemin relatif `/`.
 
 ### Endpoints disponibles
 
@@ -43,6 +43,16 @@ L'URL de base de l'API est définie par le chemin relatif `/api`.
      - 200 OK: Retourne la liste des pâtisseries avec les données mises à jour.
      - 400 Bad Request: Si la quantité spécifiée n'est pas un nombre entier positif.
      - 404 Not Found: Si aucune pâtisserie n'est trouvée.
+
+4. **Récupérer des pâtisseries gagnées avec mise à jour des données**
+   - **Endpoint :** `/game/refresh`
+   - **Méthode :** `GET`
+   - **Description :** Met à jour les données avec les mocks 
+  
+   - **Paramètres URL :** aucun
+   - **Réponses :**
+     - 200 OK: Met à jour les données dans pour l'API.
+     - 404 Not Found: Il n'y a plus de pâtisserie
 
 ## Exemples d'utilisation
 
