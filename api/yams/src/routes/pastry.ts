@@ -91,7 +91,7 @@ router.get("/pastries-count", authentified, async (req: CustomRequest, res: Resp
     return res.json(pastries?.length || 0);
 });
 
-// Endpoint pour ajouter une pastrie
+// Endpoint pour ajouter une pastrie avec ou sans image
 router.post("/pastry", authentified, upload.single('image'), async (req: CustomRequest, res: Response) => {
     const { name, quantity, image, choice } = req?.file ? trimAll(JSON.parse(req.body?.pastry)) : trimAll(req.body) ;
     const p: Pastry = { name : name ?? null , quantity : quantity ?? null, image : image ?? '', choice : choice ?? false } ;
