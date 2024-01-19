@@ -114,3 +114,7 @@ for(const u of users){
 ```bash
 npm install multer @types/multer
 ```
+
+Pour accéder à une image sur l'API
+
+http://localhost:3001/uploads/images/1705623642576.jpeg
