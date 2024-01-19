@@ -8,7 +8,7 @@ import { Pastry } from "../pastry";
 import fs from 'fs/promises';
 import dotenv from 'dotenv';
 import path from "path";
-import { upload } from './upload'; 
+import { upload } from '../middleware/upload'; 
 
 dotenv.config();
 

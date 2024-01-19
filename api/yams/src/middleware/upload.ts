@@ -1,15 +1,17 @@
 import { Request, Response } from 'express';
 import multer, { Multer } from 'multer';
 import path from 'path';
-
+/**
+ * Middleware pour uploader des images
+ * 1. Destination dossier d'assets Node
+ * 2. Calcul de l'extension du fichier 
+ */
 const storage = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb: (error: null | Error, destination: string) => void) => {
-    console.log("middleware", file)
     cb(null, path.join(__dirname, '../uploads/images/') ); 
   },
   filename: (req: Request, file: Express.Multer.File, cb: (error: null | Error, filename: string) => void) => {
     const ext = path.extname(file.originalname);
-    console.log(file)
     cb(null, `${Date.now()}${ext}`);
   }
 });

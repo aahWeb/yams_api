@@ -16,6 +16,7 @@ import cors from "cors";
 const port: any = PORT;
 const app: Express = express();
 
+// dossier des assets statiques accessible avec l'adresse de l'API
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({
