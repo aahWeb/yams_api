@@ -3,6 +3,7 @@ import { readPastries } from "./middleware/data"
 import cookieParser from 'cookie-parser';
 import router from "./routes/index";
 import dotenv from 'dotenv';
+import path from 'path' ;
 dotenv.config();
 
 const PORT = process.env.PORT || 3001;
@@ -14,6 +15,8 @@ import cors from "cors";
 
 const port: any = PORT;
 const app: Express = express();
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({
   // url app
@@ -30,6 +33,8 @@ app.use( readPastries  )
 
 // router
 app.use(router);
+
+
 
 app.listen(port, () =>
   console.log(`listen http://${APP_URL}:${port}`),
