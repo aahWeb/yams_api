@@ -8,7 +8,7 @@ import { Pastry } from "../pastry";
 import fs from 'fs/promises';
 import dotenv from 'dotenv';
 import path from "path";
-import { upload } from '../middleware/upload'; 
+import { upload } from '../middleware/upload';
 
 dotenv.config();
 
@@ -93,8 +93,8 @@ router.get("/pastries-count", authentified, async (req: CustomRequest, res: Resp
 
 // Endpoint pour ajouter une pastrie
 router.post("/pastry", authentified, upload.single('image'), async (req: CustomRequest, res: Response) => {
-    const { name, quantity, image, choice } = req?.file ? trimAll(JSON.parse(req.body?.pastry)) : trimAll(req.body) ;
-    const p: Pastry = { name : name ?? null , quantity : quantity ?? null, image : image ?? '', choice : choice ?? false } ;
+    const { name, quantity, image, choice } = req?.file ? trimAll(JSON.parse(req.body?.pastry)) : trimAll(req.body);
+    const p: Pastry = { name: name ?? null, quantity: quantity ?? null, image: image ?? '', choice: choice ?? false };
     const pastries: Pastry[] | undefined = req.locals?.pastries
 
     // on vérifie les champs obligatoires
@@ -105,10 +105,11 @@ router.post("/pastry", authentified, upload.single('image'), async (req: CustomR
     }
     if (pastries) {
         // on récupère le dernier id et on incrémente
-        const lastId : number = pastries.map( p => ( {
-             ...p, id : parseInt( p?.id || "0" )  } ) ).sort( (p, q) =>  - ( p.id - q.id) )[0]?.id || 0
+        const lastId: number = pastries.map(p => ({
+            ...p, id: parseInt(p?.id || "0")
+        })).sort((p, q) => - (p.id - q.id))[0]?.id || 0
         p.id = (lastId + 1).toString();
-        p.image = req?.file?.filename || '' ; // on récupère ou pas le nom de l'image
+        p.image = req?.file?.filename || ''; // on récupère ou pas le nom de l'image
         pastries.push(p);
         await fs.writeFile(filePath, JSON.stringify(pastries), 'utf-8');
 
@@ -153,11 +154,16 @@ router.put("/pastry/:id", authentified, async (req: CustomRequest, res: Response
 
         return p
     });
-    
-    if( pastries )
+
+    if (pastries)
         await fs.writeFile(filePath, JSON.stringify(pastries), 'utf-8');
 
-    return res.json(p);
+    return res.json({
+        name: name ?? p.name,
+        quantity: quantity ?? p.quantity,
+        image: image ?? p.image,
+        choice: choice ?? p.choice
+    });
 });
 
 // Endpoint pour supprimer une pastrie avec son id 

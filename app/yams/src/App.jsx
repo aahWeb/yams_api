@@ -29,7 +29,6 @@ function App() {
     const formData = new FormData();
     formData.append('image', selectedFile);
     formData.append('pastry', JSON.stringify({ name: "a", quantity: 1 }));
-    const credential = { name: "a", quantity: 1 };
     try {
       const res = await axios.post(`http://localhost:3001/api/pastry`, formData, {
         withCredentials: true,
