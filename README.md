@@ -192,3 +192,103 @@ npm run test
 - **tests/unit** : Contient des tests unitaires pour des parties spécifiques de votre application (par exemple, des fonctions, des modules).
 
 - **tests/integration** : Contient des tests d'intégration qui testent l'interaction entre différentes parties de votre application, tels que les points finaux express dans votre cas.
+
+## Pasty avec authentification mock
+
+### Introduction à la notion de Mock
+
+>[!IMPORTANT]
+> Dans Jest, un mock est une fonction simulée qui remplace une fonction ou un module réel dans le but de contrôler son comportement pendant les tests. Les mocks sont utilisés pour isoler le code testé et s'assurer que les dépendances externes sont simulées de manière contrôlée, garantissant ainsi que les tests sont reproductibles et ne dépendent pas de l'état du monde extérieur.
+
+Voici un exemple pour comprendre 
+
+```js
+// Fonction à mocker
+function add(a, b) {
+  return a + b;
+}
+
+// Mock de la fonction add
+const mockAdd = jest.fn((a, b) => a + b);
+
+// Utilisation du mock à la place de la fonction réelle
+jest.mock('./path/to/add', () => ({
+  add: mockAdd,
+}));
+
+// Utilisation du mock dans un test
+test('adds 1 + 2 to equal 3', () => {
+  expect(mockAdd(1, 2)).toBe(3);
+  // Vérifie le nombre d'appels à la fonction
+  expect(mockAdd).toHaveBeenCalledTimes(1);
+});
+```
+
+### Dans l'API 
+
+1. Création du mock pour l'authentification
+
+```js
+import { Response, Request, NextFunction } from 'express';
+
+export const authentifiedMock = async (req: Request, res: Response, next: NextFunction) => {
+    res.locals.id = "1";
+    next(); 
+};
+```
+
+Ce mock sera appelé comme suit dans le test 
+
+:rocket:
+
+```js
+
+import { authentified } from '../../src/middleware/index'; 
+import { authentifiedMock } from '../mocks/authServiceMock'; 
+import request from 'supertest';
+import express, { Express } from 'express';
+import router from '../../src/routes/pastry';
+import { readPastries } from "../../src/middleware/data"
+
+jest.mock('../../src/middleware/index', () => ({
+    authentified: authentifiedMock,
+}));
+
+const app: Express = express();
+app.use( readPastries  )
+app.use('/api', router);
+
+describe('GET /pastries-count', () => {
+    it('responds with the count of pastries for an authenticated user', async () => {
+        const numberPastries = 8 ;
+        const response = await request(app).get('/api/pastries-count');
+        
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual(numberPastries);
+    });
+});
+```
+
+>[!WARNING]
+> Notez que le middleware des data est appelé pour récupérer et lire les données dans le test sans mock pour cette partie
+
+:rocket:
+```js
+app.use( readPastries  )
+```
+
+## Mock des données 
+
+La méthode fn() de callback permet de créer une simulation d'une promise pour le fichier.
+
+
+:rocket:
+```js
+export const readFileMock = jest.fn();
+
+export const fsPromisesMock = {
+    readFile: readFileMock,
+};
+```
+
+Il ne reste plus qu'à créer le test pour ne plus dépendre de la partie lecture de données dans l'API et tester unquimenet la logique dans les tests.
