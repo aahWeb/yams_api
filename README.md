@@ -4,6 +4,8 @@
 
 Installation de la dernière version de Node LTS
 
+:shel:
+
 ```bash
 nvm install 20.10.0
 
@@ -11,7 +13,13 @@ nvm use 20.10.0
 
 # vérifiez 
 node -v
+```
 
+## Partie React
+
+Installation de tailwindcss pour **React**
+
+```bash
 # Installation de tailwindcss
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
@@ -39,17 +47,15 @@ Dans le fichier style.css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 ```
 
-Voyez également la documentation : https://tailwindcss.com/docs/guides/vite
+>[!NOTE]
+>Voyez également la documentation : https://tailwindcss.com/docs/guides/vite
 
 
 ```bash
 npm install @reduxjs/toolkit react-redux
-
 npm install dotenv
-
 ```
 
 Dans vite.config.js
@@ -83,10 +89,11 @@ Il faut installer dans React
 npm install js-cookie
 ```
 
-- Côté Middleware JWT il n'y a rien à faire le cookie s'écrit bien dans le navigateur. Il sera renvoyé au client via withCredentials à true.
+>[!NOTE]
+> Côté Middleware JWT il n'y a rien à faire le cookie s'écrit bien dans le navigateur. Il sera renvoyé au client via withCredentials à true.
 
 
-- router
+1. Le router
 
 ```bash
 npm install react-router-dom localforage match-sorter sort-by
@@ -106,15 +113,75 @@ for(const u of users){
 }
 ```
 
-## Les données de l'API
+## Partie API YAMS
 
-- les pastries persistent dans un fichier pastries.json
-- les données utilisateurs sont dans un fichier users.ts ou users.json et ne persiste qu'en mémoire sur le serveur Node
+- Les pastries persistent dans un fichier pastries.json
+- Les données utilisateurs sont dans un fichier users.ts ou users.json et ne persiste qu'en mémoire sur le serveur Node
+
+:shell:
 
 ```bash
 npm install multer @types/multer
 ```
 
-Pour accéder à une image sur l'API
+Pour accéder à une image depuis l'API
 
 http://localhost:3001/uploads/images/1705623642576.jpeg
+
+
+## Jest
+
+Installation des tests
+
+:shell:
+
+```bash
+npm install --save-dev jest typescript ts-jest @types/jest
+npx ts-jest config:init
+
+npm install --save-dev supertest @types/supertest
+```
+
+Comment lancer les tests :
+
+Dans le package.json
+
+
+:shell:
+
+```bash
+//...
+"scripts": {
+    "dev": "concurrently \"tsc --watch\" \"tsnd --respawn src/app.ts\"",
+    "test": "jest"
+  },
+// ...
+```
+
+:shell:
+
+```bash
+npm run test
+```
+
+## Organisation des tests
+
+```txt
+├── src
+│   ├── app.ts
+│   ├── routes.ts
+│   └── server.ts
+├── tests
+│   ├── unit
+│   │   └── modifyquantity.spec.ts
+│   └── integration
+│       ├── pastries.test.ts
+│       └── other-endpoints.test.ts
+├── tsconfig.json
+├── jest.config.js
+└── package.json
+```
+
+- **tests/unit** : Contient des tests unitaires pour des parties spécifiques de votre application (par exemple, des fonctions, des modules).
+
+- **tests/integration** : Contient des tests d'intégration qui testent l'interaction entre différentes parties de votre application, tels que les points finaux express dans votre cas.

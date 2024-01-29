@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"tsc --watch\" \"tsnd --respawn src/app.ts\""
+    "dev": "concurrently \"tsc --watch\" \"tsnd --respawn src/app.ts\"",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -15,11 +16,16 @@
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.11",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^20.2.1",
+    "@types/supertest": "^6.0.2",
     "concurrently": "^8.0.1",
+    "jest": "^29.7.0",
     "nodemon": "^2.0.22",
-    "typescript": "^5.0.4"
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "@types/multer": "^1.4.11",
