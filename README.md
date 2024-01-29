@@ -4,7 +4,7 @@
 
 Installation de la dernière version de Node LTS
 
-:shel:
+:shell:
 
 ```bash
 nvm install 20.10.0
@@ -18,6 +18,8 @@ node -v
 ## Partie React
 
 Installation de tailwindcss pour **React**
+
+:shell:
 
 ```bash
 # Installation de tailwindcss
@@ -52,6 +54,7 @@ Dans le fichier style.css
 >[!NOTE]
 >Voyez également la documentation : https://tailwindcss.com/docs/guides/vite
 
+:shell:
 
 ```bash
 npm install @reduxjs/toolkit react-redux
@@ -85,6 +88,8 @@ VITE_REACT_APP_API_URL=http://localhost:3001/api
 
 Il faut installer dans React
 
+:shell:
+
 ```bash
 npm install js-cookie
 ```
@@ -94,6 +99,8 @@ npm install js-cookie
 
 
 1. Le router
+
+:shell:
 
 ```bash
 npm install react-router-dom localforage match-sorter sort-by
