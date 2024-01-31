@@ -113,15 +113,13 @@ router.post("/pastry", authentified, upload.single('image'), async (req: CustomR
         pastries.push(p);
         await fs.writeFile(filePath, JSON.stringify(pastries), 'utf-8');
 
-        return res.json(p);
+        return res.status(200).json(p);
     }
-
 
     return res.status(400).json({
         message: 'Données invalides !'
     });
 
-    return res.status(200)
 });
 
 // Endpoint pour modifier une pastrie 
