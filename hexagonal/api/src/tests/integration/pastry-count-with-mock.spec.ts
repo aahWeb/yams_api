@@ -1,23 +1,22 @@
-
-import { authentified } from '../../middlewares/authentified';
-import { authentifiedMock } from '../mocks/authServiceMock';
-import { fsPromisesMock } from "../mocks/fsPromiseMock"
 import request from 'supertest';
 import express, { Express } from 'express';
-import router from '../../infrastructure/web/routes/index';
+import { authentifiedMock } from '../mocks/authServiceMock';
 
 jest.mock('../../middlewares/authentified', () => ({
     authentified: authentifiedMock,
 }));
 
+import { fsPromisesMock } from "../mocks/fsPromiseMock"
+
 jest.mock('fs/promises', () => fsPromisesMock);
 
+import pastrie from "../../infrastructure/web/routes/pastry";
+
 const app: Express = express();
-app.use('/api', router);
+app.use('/api', pastrie);
 
 describe('GET /pastries-count', () => {
     it('responds with the count of pastries for an authenticated user with mock pastries', async () => {
-        const numberPastries = 2;
         const mockPastries = [
             {
                 "id": "7",
@@ -40,15 +39,14 @@ describe('GET /pastries-count', () => {
         // Configurez le mock pour fs/promises.readFile pour retourner les données fictives
         fsPromisesMock.readFile.mockResolvedValue(JSON.stringify(mockPastries));
 
-        const response = await request(app).get('/pastry/count');
+        const response = await request(app).get('/api/pastry/count');
         
-        // expect(response.status).toBe(200);
-        // expect(response.body).toEqual(numberPastries);
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual({count: mockPastries.length});
 
-        // Vérifiez si la fonction fs/promises.readFile a été appelée correctement
-        // expect(fsPromisesMock.readFile).toHaveBeenCalledWith(
-        //     expect.stringContaining('pastries.json'),
-        //     'utf-8'
-        // );
+        expect(fsPromisesMock.readFile).toHaveBeenCalledWith(
+            expect.stringContaining('pastries.json'),
+            'utf-8'
+        );
     });
 });
