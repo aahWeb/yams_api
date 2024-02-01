@@ -6,6 +6,7 @@
   "scripts": {
     "start": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"tsc --watch\" \"tsnd --respawn src/app.ts\"",
+    "build": "tsc",
     "test": "jest"
   },
   "keywords": [],
