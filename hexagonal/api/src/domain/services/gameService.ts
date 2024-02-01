@@ -1,6 +1,5 @@
-import pastryService from './pastryService';
 import { pastrieRepository } from '../../infrastructure/repositories/pastryRepository';
-import { modifyQuantityPastries } from '../../utils/helpers';
+import { modifyQuantityPastries } from '../../utils/pastries';
 import { Pastry } from '../entities/Pastry';
 
 export const gameService = {
