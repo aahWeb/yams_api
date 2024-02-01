@@ -5,9 +5,8 @@
         "module": "CommonJS",
         "strict": true,
         "typeRoots": ["node_modules/@types"],
+        "resolveJsonModule": true,
         "esModuleInterop": true
     },
-    "include": [
-        "src/**/*"
-    ],
+    "include": [ "src/**/*", "src/infrastructure/data/*.json" ]
 }
