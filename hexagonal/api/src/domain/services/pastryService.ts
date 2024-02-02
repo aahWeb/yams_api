@@ -1,4 +1,5 @@
 import { pastrieRepository } from '../../infrastructure/repositories/pastryRepository';
+import { generateRandomString } from '../../utils/helpers';
 import { Pastry } from '../entities/Pastry';
 import path from 'path';
 
@@ -48,16 +49,16 @@ const pastriesService = {
     },
 
     // service qui ajoute une pâtisserie
-    async addPastry(pastryData: Pastry): Promise<Pastry> {
+    async addPastry(pastryData: Partial<Pastry>): Promise<Pastry> {
         const pastries = await this.getAllPastries();
         const newPastry = {
             ...pastryData,
             id: ((parseInt((pastries[pastries.length - 1]?.id) || "0")) + 1).toString()
         };
-        pastries.push(newPastry);
+        pastries.push(newPastry as Pastry);
         await pastrieRepository.writePastries(pastries);
 
-        return newPastry;
+        return newPastry as Pastry;
     },
 
     // service qui met à jour une pâtisserie
@@ -81,15 +82,6 @@ const pastriesService = {
         const pastries = await this.getAllPastries();
         const updatedPastries = pastries.filter(p => p.id !== id);
         await pastrieRepository.writePastries(updatedPastries);
-    },
-
-    // service qui gère l'upload d'une image pour une pâtisserie
-    async uploadImage(image: Express.Multer.File): Promise<string> {
-        const ext = path.extname(image.originalname);
-        // Logique pour stocker l'image, par exemple, vous pouvez utiliser le même dossier 'uploads'
-        const imagePath = `${Date.now()}${ext}`;
-
-        return imagePath;
     }
 };
 

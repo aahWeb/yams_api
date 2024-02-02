@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import pastriesService from '../../../domain/services/pastryService';
 import { trimAll } from '../../../utils/helpers';
+import { parsePastryData, validatePastryData } from '../../../utils/pastries';
+import { uploadService } from '../../../domain/services/uploadService';
 
 export const PastryController = {
 
@@ -97,21 +99,17 @@ export const PastryController = {
     // elle ajoute une pâtisserie
     async addPastry(req: Request, res: Response) {
         try {
-            const { name, quantity, image, choice } = req?.file ? trimAll(JSON.parse(req.body?.pastry)) : trimAll(req.body);
+            const pastryData = parsePastryData(req);
+            validatePastryData(pastryData);
 
-            if (!name || !quantity) {
-                throw new Error('Données invalides !', JSON.parse(req.body.pastry));
-            }
-            let imagePath = '';
-            if (req?.file) {
-                imagePath = await pastriesService.uploadImage(req.file)
-            }
+            if (!req.file || !req.file.buffer)
+                return res.status(400).json({ message: 'Fichier non trouvé !' });
+
+            const imagePath = await uploadService.validateAndUploadFile(req.file, 'pastries', ['.png', '.jpg', '.jpeg'], 1024 * 1024 * 4);
 
             const newPastry = await pastriesService.addPastry({
-                name,
-                quantity,
-                image: imagePath,
-                choice
+                ...pastryData,
+                image: imagePath
             });
             
             res.json(newPastry);
