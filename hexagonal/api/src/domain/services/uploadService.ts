@@ -1,13 +1,31 @@
 import path from 'path';
 import { generateRandomString } from '../../utils/helpers';
 import fs from 'fs/promises';
+import multer from 'multer';
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, path.join(__dirname, '../../uploads/'));
+    },
+    filename: function(req, file, cb) {
+        const ext = path.extname(file.originalname);
+        cb(null, `${generateRandomString(12)}${ext}`);
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 * 5 },
+    fileFilter: function(req, file, cb) {
+        cb(null, true);
+    }
+});
 
 export const uploadService = {
+    upload: upload.single('image'),
+
     async validateAndUploadFile(file: Express.Multer.File, userId: string, allowed: string[], maxSize: number): Promise<string> {
-        
-        if (!this.checkFileIsValid(file, allowed, maxSize)) {
-            throw new Error('Fichier non valide !');
-        }
+        this.validateFile(file, allowed, maxSize)
 
         const imagePath = this.generateImagePath(file, userId);
 
@@ -37,11 +55,17 @@ export const uploadService = {
         return !filePath.includes('..');
     },
 
-    checkFileIsValid(file: Express.Multer.File, allowed: string[], maxSize: number): boolean {
-        return  this.checkFileType(file, allowed) &&
-                this.checkFileSize(file, maxSize) &&
-                this.checkPathTraversal(file.originalname);
-    }
+    validateFile(file: Express.Multer.File, allowed: string[], maxSize: number): boolean {
+        if (!this.checkFileType(file, allowed))
+            throw new Error('Type de fichier non valide !');
 
+        if (!this.checkFileSize(file, maxSize))
+            throw new Error('Fichier trop volumineux !');
+
+        if (!this.checkPathTraversal(file.originalname))
+            throw new Error('Nom de fichier invalide !');
+
+        return true;
+    }
 
 };

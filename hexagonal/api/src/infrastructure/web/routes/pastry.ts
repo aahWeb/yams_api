@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import { PastryController } from '../controllers/PastryController';
 import { authentified } from '../../../middlewares/authentified';
-import { upload } from '../../../middlewares/upload';
+import { uploadService } from '../../../domain/services/uploadService';
 
 const pastrie: Router = express();
 
@@ -27,7 +27,7 @@ pastrie.get('/pastry/range/:offset/:limit', authentified, PastryController.getPa
 pastrie.get('/pastry/order-quantity/:offset/:limit', authentified, PastryController.getPastriesByQuantity);
 
 // endpoint: /pastries (POST)
-pastrie.post('/pastry',authentified, upload.single('image'), PastryController.addPastry);
+pastrie.post('/pastry',authentified, uploadService.upload, PastryController.addPastry);
 
 // endpoint: /pastries/:id (PUT)
 pastrie.put('/pastry/:id',authentified, PastryController.updatePastrie);
